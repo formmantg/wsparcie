@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ankieta</title>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --red: #e10600;
+      --red-dark: #b00000;
+      --gray: #1a1a1a;
+      --border: #333;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      line-height: 1.4;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: var(--black);
+      border-bottom: 6px solid var(--red);
+      padding: 50px 0 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 8vw, 3.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    h1 span {
+      color: var(--red);
+    }
+
+    .tagline {
+      font-family: Arial, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--white);
+      opacity: 0.85;
+    }
+
+    /* Main */
+    main {
+      padding: 50px 0 80px;
+    }
+
+    .ankieta-box {
+      background: var(--gray);
+      border: 3px solid var(--white);
+      padding: 32px 28px;
+    }
+
+    .pytanie {
+      margin-bottom: 40px;
+    }
+
+    .pytanie:last-of-type {
+      margin-bottom: 32px;
+    }
+
+    .pytanie h2 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+
+    .opcje {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .opcja {
+      position: relative;
+    }
+
+    .opcja input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .opcja label {
+      display: block;
+      text-align: center;
+      padding: 18px 10px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 3px solid var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    /* TAK */
+    .opcja.tak label {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .opcja.tak input:checked + label {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--white);
+    }
+
+    .opcja.tak label:hover {
+      background: #1a1a1a;
+    }
+
+    /* NIE */
+    .opcja.nie label {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .opcja.nie input:checked + label {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .opcja.nie label:hover {
+      background: #1a1a1a;
+    }
+
+    /* Submit */
+    button {
+      width: 100%;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 20px;
+      font-family: inherit;
+      font-size: 1.3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button:hover {
+      background: var(--red-dark);
+    }
+
+    button:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+
+    .wynik {
+      display: none;
+      margin-top: 30px;
+      padding: 24px;
+      border: 3px solid var(--red);
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .wynik.show {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      border-top: 3px solid var(--red);
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 480px) {
+      .ankieta-box {
+        padding: 24px 18px;
+      }
+      .pytanie h2 {
+        font-size: 1.15rem;
+      }
+      .opcja label {
+        padding: 16px 8px;
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>ANKIETA<br><span>NARODOWA</span></h1>
+      <p class="tagline">Twoje zdanie ma znaczenie</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="ankieta-box">
+        <form id="ankieta">
+
+          <div class="pytanie">
+            <h2>1. Czy zgadzasz się z obecną władzą?</h2>
+            <div class="opcje">
+              <div class="opcja tak">
+                <input type="radio" name="q1" id="q1tak" value="tak" required>
+                <label for="q1tak">TAK</label>
+              </div>
+              <div class="opcja nie">
+                <input type="radio" name="q1" id="q1nie" value="nie">
+                <label for="q1nie">NIE</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="pytanie">
+            <h2>2. Czy obecna władza działa w interesie obywateli?</h2>
+            <div class="opcje">
+              <div class="opcja tak">
+                <input type="radio" name="q2" id="q2tak" value="tak" required>
+                <label for="q2tak">TAK</label>
+              </div>
+              <div class="opcja nie">
+                <input type="radio" name="q2" id="q2nie" value="nie">
+                <label for="q2nie">NIE</label>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit">WYŚLIJ ODPOWIEDZI</button>
+        </form>
+
+        <div class="wynik" id="wynik"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      Głos każdego się liczy
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('ankieta').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const q1 = document.querySelector('input[name="q1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="q2"]:checked')?.value;
+
+      if (!q1 || !q2) return;
+
+      const wynik = document.getElementById('wynik');
+      wynik.innerHTML = `
+        Twoje odpowiedzi zostały zapisane.<br><br>
+        Pytanie 1: <strong>${q1.toUpperCase()}</strong><br>
+        Pytanie 2: <strong>${q2.toUpperCase()}</strong>
+      `;
+      wynik.classList.add('show');
+
+      // Tu później można podpiąć wysyłanie danych
+      console.log({ q1, q2 });
+    });
+  </script>
+
+</body>
+</html>
